@@ -4,14 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlogWebApp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogWebApp.Data
 {
     public static class DbSeeder
     {
-        public static void SeedDb(UserManager<IdentityUser> userManager)
+        public static void SeedDb(UserManager<IdentityUser> userManager, IServiceProvider serviceProvider) 
         {
-            //SeedPeople(context);
+            CreateUserRoles(serviceProvider).Wait();
             SeedUsers(userManager);
         }
 
@@ -65,8 +66,30 @@ namespace BlogWebApp.Data
             userManager.CreateAsync(user3, "Password123!").Wait();
             userManager.CreateAsync(user4, "Password123!").Wait();
             userManager.CreateAsync(user5, "Password123!").Wait();
-            userManager.CreateAsync(user6, "abc123!").Wait();
+            userManager.CreateAsync(user6, "Abc123!").Wait();
         }
+
+         private static async Task CreateUserRoles(IServiceProvider serviceProvider)
+         {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            String[] roles = { "Admin", "Mod", "User" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roles)
+            {
+                var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+            IdentityUser user = await UserManager.FindByEmailAsync("Member1@email.com");
+            await UserManager.AddToRoleAsync(user, "Admin");
+
+         }
 
         /*private static void SeedPeople(ApplicationDbContext context)
         {

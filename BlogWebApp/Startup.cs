@@ -45,7 +45,7 @@ namespace BlogWebApp
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -63,7 +63,7 @@ namespace BlogWebApp
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-            DbSeeder.SeedDb( userManager);
+            DbSeeder.SeedDb(userManager, serviceProvider);
 
             app.UseMvc(routes =>
             {
