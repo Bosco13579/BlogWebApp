@@ -11,8 +11,11 @@ namespace BlogWebApp.Data
         {
             context.Database.EnsureCreated();
 
-            await roleManager.CreateAsync(new IdentityRole("admin"));
-            await roleManager.CreateAsync(new IdentityRole("user"));
+            if (!context.Roles.Any())
+            {
+                await roleManager.CreateAsync(new IdentityRole("admin"));
+                await roleManager.CreateAsync(new IdentityRole("user"));
+            }
 
             var adminRole = roleManager.Roles.FirstOrDefault(x => x.Name == "admin");
             var userRole = roleManager.Roles.FirstOrDefault(x => x.Name == "user");
@@ -21,21 +24,13 @@ namespace BlogWebApp.Data
             var claim2 = new IdentityRoleClaim<string> { ClaimType = "CanComment", ClaimValue = "CanComment" };
             var claim3 = new IdentityRoleClaim<string> { ClaimType = "CanEdit", ClaimValue = "CanEdit" };
 
+            if (!context.RoleClaims.Any())
+            {
+                await roleManager.AddClaimAsync(adminRole, claim1.ToClaim());
+                await roleManager.AddClaimAsync(adminRole, claim3.ToClaim());
+                await roleManager.AddClaimAsync(userRole, claim2.ToClaim());
+            }
 
-
-            await roleManager.AddClaimAsync(adminRole, claim1.ToClaim());
-            await roleManager.AddClaimAsync(adminRole, claim3.ToClaim());
-            await roleManager.AddClaimAsync(userRole, claim2.ToClaim());
-
-        }
-
-        public static void SeedDb(UserManager<IdentityUser> userManager)
-        {
-            SeedUsers(userManager);
-        }
-
-        private static void SeedUsers(UserManager<IdentityUser> userManager)
-        {
             IdentityUser user = new IdentityUser
             {
                 UserName = "Member1@email.com",
@@ -85,6 +80,26 @@ namespace BlogWebApp.Data
             userManager.CreateAsync(user4, "Password123!").Wait();
             userManager.CreateAsync(user5, "Password123!").Wait();
             userManager.CreateAsync(user6, "Abc123!").Wait();
+
+            await userManager.AddToRoleAsync(user, "admin");
+            await userManager.AddToRoleAsync(user1, "user");
+            await userManager.AddToRoleAsync(user2, "user");
+            await userManager.AddToRoleAsync(user3, "user");
+            await userManager.AddToRoleAsync(user4, "user");
+            await userManager.AddToRoleAsync(user5, "user");
+            await userManager.AddToRoleAsync(user6, "user");
+
+
+        }
+
+        public static void SeedDb(UserManager<IdentityUser> userManager)
+        {
+            SeedUsers(userManager);
+        }
+
+        private static void SeedUsers(UserManager<IdentityUser> userManager)
+        {
+            
         }
     }
 }

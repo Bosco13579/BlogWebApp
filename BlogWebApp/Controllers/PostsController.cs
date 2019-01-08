@@ -30,8 +30,7 @@ namespace BlogWebApp.Controllers
 
 
         // GET: Posts/Details/5
-        [Authorize(Roles = "admin")]
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "admin, user")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -95,7 +94,6 @@ namespace BlogWebApp.Controllers
 
         // GET: Posts/Create
         [Authorize(Roles = "admin")]
-        [Authorize(Roles = "user")]
         public IActionResult Create()
         {
             return View();
