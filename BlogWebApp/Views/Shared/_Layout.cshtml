@@ -15,6 +15,48 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        div.zoomed {
+            zoom: 3;
+            -moz-transform: scale(3);
+            -moz-transform-origin: 0 0;
+        }
+
+        h1 {
+            font-size: 30px;
+            color: black;
+            font-style: initial;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .container {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #ffd800;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-image: url(../Shared/background-wallpaper-003.jpg);
+            background-repeat: no-repeat;
+        }
+
+
+        li a:hover:not(.active) {
+            background-color: #808080;
+        }
+
+        nav navbar-nav {
+            background-color: #ffffff;
+        }
+    </style>
+
+    }
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">

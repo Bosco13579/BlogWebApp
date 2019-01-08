@@ -38,7 +38,7 @@ namespace BlogWebApp
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.ConfigureApplicationCookie(options =>
@@ -52,7 +52,7 @@ namespace BlogWebApp
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context,
-            UserManager<IdentityUser> userManager, IServiceProvider serviceProvider)
+            UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -70,7 +70,7 @@ namespace BlogWebApp
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-            DbSeeder.SeedDb(userManager, serviceProvider);
+            DbSeeder.SeedDb(context, userManager, roleManager).Wait();
 
             app.UseMvc(routes =>
             {
