@@ -91,15 +91,5 @@ namespace BlogWebApp.Data
 
 
         }
-
-        public static void SeedDb(UserManager<IdentityUser> userManager)
-        {
-            SeedUsers(userManager);
-        }
-
-        private static void SeedUsers(UserManager<IdentityUser> userManager)
-        {
-            
-        }
     }
 }

@@ -70,7 +70,6 @@ namespace BlogWebApp
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-          //  DbSeeder.SeedDb(userManager);
             DbSeeder.SeedDb(context, userManager, roleManager).Wait();
 
             app.UseMvc(routes =>
