@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlogWebApp.Data;
 using BlogWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BlogWebApp.Controllers
 {
@@ -28,6 +30,8 @@ namespace BlogWebApp.Controllers
 
 
         // GET: Posts/Details/5
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -90,6 +94,8 @@ namespace BlogWebApp.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "user")]
         public IActionResult Create()
         {
             return View();
@@ -112,6 +118,7 @@ namespace BlogWebApp.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -163,6 +170,7 @@ namespace BlogWebApp.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize (Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
